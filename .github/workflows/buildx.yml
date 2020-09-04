@@ -73,11 +73,14 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/386
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.prep.outputs.tags }}
-          build-args: BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          build-args: BRANCH=$BRANCH
           labels: |
-            "org.opencontainers.image.revision=$GITHUB_SHA"
-            "org.opencontainers.image.created=$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
-            "org.opencontainers.image.version=${GITHUB_REF#refs/tags/v}"
-            "com.github.repo.branch=$(git rev-parse --abbrev-ref HEAD)"
-            "com.github.repo.dockerfile=Dockerfile"
-
+            org.opencontainers.image.revision=$GITHUB_SHA
+            org.opencontainers.image.created=$CREATED
+            org.opencontainers.image.version=$VERSION
+            com.github.repo.branch=$BRANCH
+            com.github.repo.dockerfile=Dockerfile
+        env:
+          VERSION: ${GITHUB_REF#refs/tags/v}
+          BRANCH: ${GITHUB_REF##*/}
+          CREATED: $(date -u +'%Y-%m-%dT%H:%M:%SZ')
