@@ -1,6 +1,6 @@
 # multi-arch-test
 
-## Steps
+## Initial Steps
 
 ### Initialize buildx
 
