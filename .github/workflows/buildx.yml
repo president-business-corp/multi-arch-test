@@ -37,6 +37,16 @@ jobs:
           fi
           echo ::set-output name=tags::${TAGS}
 
+          LABELS="org.opencontainers.image.revision=$GITHUB_SHA"
+          LABELS="$LABELS,org.opencontainers.image.created=$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          LABELS="$LABELS,org.opencontainers.image.version=${GITHUB_REF#refs/tags/v}"
+          LABELS="$LABELS,com.github.repo.branch=${GITHUB_REF##*/}"
+          LABELS="$LABELS,com.github.repo.dockerfile=Dockerfile"
+          echo ::set-output name=labels::${LABELS}
+
+          BUILD_ARGS="BRANCH=${GITHUB_REF##*/}"
+          echo ::set-output name=args::${BUILD_ARGS}
+
       - name: Tag names
         run: echo ${{ steps.prep.outputs.tags }}
 
@@ -73,14 +83,5 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/386
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.prep.outputs.tags }}
-          build-args: BRANCH=$BRANCH
-          labels: |
-            org.opencontainers.image.revision=$GITHUB_SHA
-            org.opencontainers.image.created=$CREATED
-            org.opencontainers.image.version=$VERSION
-            com.github.repo.branch=$BRANCH
-            com.github.repo.dockerfile=Dockerfile
-        env:
-          VERSION: ${GITHUB_REF#refs/tags/v}
-          BRANCH: ${GITHUB_REF##*/}
-          CREATED: $(date -u +'%Y-%m-%dT%H:%M:%SZ')
+          build-args: ${{ steps.prep.outputs.args }}
+          labels: ${{ steps.prep.outputs.labels }}
