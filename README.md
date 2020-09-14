@@ -1,6 +1,6 @@
 # multi-arch-test
 
-https://github.com/orgs/president-business-corp/packages/container/test%2Fmulti-arch/
+https://github.com/orgs/president-business-corp/packages/container/package/test%2Fmulti-arch
 
 ## Initial Steps
 
@@ -52,4 +52,4 @@ docker buildx build --platform linux/arm/v7,linux/amd64 --tag ghcr.io/president-
 
 ## Multi-Arch Container
 
-https://github.com/orgs/president-business-corp/packages/container/test%2Fmulti-arch/
+https://github.com/orgs/president-business-corp/packages/container/package/test%2Fmulti-arch
